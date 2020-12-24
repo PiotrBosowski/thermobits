@@ -9,6 +9,11 @@ truth object in the image that looks like:
 Where x, y, width, and height are relative to the image's width and h.
 """
 
+category_map = {1: '1',
+                2: '2',
+                3: '3',
+                17: '4'}
+
 for subset in ['train', 'val', 'video']:
     images_path = os.path.join('FLIR_ADAS_1_3', subset,
                                'Annotated_thermal_8_bit')
@@ -21,9 +26,9 @@ for subset in ['train', 'val', 'video']:
                                if annot['image_id'] == image['id']]
         image_name = os.path.basename(image['file_name'])
         base, ext = os.path.splitext(image_name)
-        with open(os.path.join(images_path, base + ".txt"), 'x') as file:
+        with open(os.path.join(images_path, base + ".txt"), 'w') as file:
             for annot in current_annotations:
-                category = annot['category_id']
+                category = category_map[annot['category_id']]
                 x = (annot['bbox'][0] + annot['bbox'][2] / 2) / image['width']
                 y = (annot['bbox'][1] + annot['bbox'][3] / 2) / image['height']
                 width = annot['bbox'][2] / image['width']
